@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\BarangExport;
+use App\Exports\BarangMasukExport;
 use App\Models\BarangMasuk;
+use App\Imports\BarangMasukImport;
 use App\Models\Barang;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -11,141 +12,147 @@ use Maatwebsite\Excel\Facades\Excel;
 class BarangMasukController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-    $barangMasuk = Barang::all();
-    return view('pages.barang_masuk.index', compact('barangMasuk'));
+        $bulan = $request->input('bulan'); // Mendapatkan input bulan dari form
+
+        if ($bulan) {
+            // Jika bulan dipilih, ambil data berdasarkan bulan dan tahun
+            $barangMasuk = BarangMasuk::whereMonth('tanggal', '=', date('m', strtotime($bulan)))
+                ->whereYear('tanggal', '=', date('Y', strtotime($bulan)))
+                ->paginate(7);
+        } else {
+            // Jika tidak ada bulan dipilih, tampilkan semua data
+            $barangMasuk = BarangMasuk::paginate(7);
+        }
+
+        return view('pages.barang_masuk.index', compact('barangMasuk'));
     }
 
-
-    // Menampilkan form untuk menambah barang masuk
     public function create()
     {
-    $barang = Barang::all(); // Mengambil semua barang dari database
-    return view('pages.barang_masuk.create', compact('barang'));
+        // Menampilkan form untuk menambah barang masuk
+        return view('pages.barang_masuk.create');
     }
 
-    // Menyimpan data barang masuk ke database
     public function store(Request $request)
-{
-    $barang = Barang::where('kode_barang', $request->kode_barang)->first();
-    $barang->stok += $request->jumlah_masuk;  // Update stok sesuai jumlah barang yang masuk
-    $barang->save();
-
-    return redirect()->route('barang_masuk.index');
-
+    {
+        // Validasi input
         $request->validate([
             'kode_barang' => 'required|string',
             'nama_barang' => 'required|string',
-            'stok' => 'required|integer',
+            'uom' => 'required|string',
+            'kuantitas' => 'required|integer',
+            'tanggal' => 'required|date',
+            'nama_penerima' => 'required|string',
+            'departemen' => 'required|string',
         ]);
 
+        // Simpan data barang masuk
         BarangMasuk::create([
             'kode_barang' => $request->kode_barang,
             'nama_barang' => $request->nama_barang,
-            'stok' => $request->stok,
-            'tanggal_waktu' => now(), // Simpan waktu saat ini
+            'uom' => $request->uom,
+            'kuantitas' => $request->kuantitas,
+            'tanggal' => $request->tanggal,
+            'nama_penerima' => $request->nama_penerima,
+            'departemen' => $request->departemen,
+            'tipe' => 'masuk', 
         ]);
 
-        // Temukan barang berdasarkan kode_barang
-        $barang = Barang::where('kode_barang', $validatedData['kode_barang'])->first();
-
-        if (!$barang) {
-            return redirect()->back()->with('error', 'Barang tidak ditemukan.');
-        }
-
-        // Tambahkan stok barang
-        $barang->stok += $validatedData['masuk'];
-        $barang->save();
-
-        // Hitung stok akhir
-        $validatedData['stok_akhir'] = $barang->stok;
-
-        // Simpan data barang masuk ke tabel barang_masuk
-        BarangMasuk::create($validatedData);
-
-        return redirect()->route('barang_masuk.index')->with('success', 'Barang masuk berhasil ditambahkan.');
+        return redirect()->route('barang_masuk.index')->with('success', 'Barang berhasil ditambahkan!');
     }
 
-    // Menampilkan form untuk mengedit barang masuk
-    public function edit($id)
-{
-    // Ambil data barang berdasarkan ID dari tabel Barang
-    $item_masuk = Barang::findOrFail($id);
+    public function edit($kode_barang)
+    {
+        // Cari data barang masuk berdasarkan kode_barang
+        $item_masuk = BarangMasuk::where('kode_barang', $kode_barang)->first();
+    
+        // Pastikan variabel dikirim ke view
+        return view('pages.barang_masuk.edit', compact('item_masuk'));
+    }
+    
+    public function tambah($id)
+    {
+        $barangMasuk = BarangMasuk::findOrFail($id);
+        return view('barang_masuk.tambah', compact('barang'));
+    }
 
-    // Kirim data barang ke view form untuk ditampilkan dan diedit
-    return view('pages.barang_masuk.edit', compact('item_masuk'));
-}
 
-
-    // Menambah stok barang masuk
-    public function tambah(Request $request, $id )
+    public function update(Request $request, $id)
     {
         // Validasi input
-        $validatedData = $request->validate([
-            'masuk' => 'required|integer|min:1',
+        $request->validate([
+            'kode_barang' => 'required|string',
+            'nama_barang' => 'required|string',
+            'uom' => 'required|string',
+            'kuantitas' => 'required|integer',
+            'tanggal' => 'required|date',
+            'nama_penerima' => 'required|date',
+            'departemen' => 'required|date',
         ]);
 
-        // Temukan barang berdasarkan ID
-        $barang = Barang::findOrFail($id);
-
-
-        // Ambil stok awal
-        $stok_awal = $barang->stok;
-
-        // Tambahkan stok barang
-        $barang->stok += $validatedData['masuk'];
-        $barang->save();
-        // Hitung stok_akhir
-        $stok_akhir = $barang->stok;
-
-        // Simpan riwayat barang masuk ke tabel barang_masuk
-        BarangMasuk::create([
-            'kode_barang' => $barang->kode_barang,
-            'nama_barang' => $barang->nama_barang,
-            'stok' => $stok_awal, // Ini stok yang sudah diperbarui
-            'masuk' => $validatedData['masuk'],
-            'stok_akhir' => $stok_akhir, // Masukkan stok_akhir
-            'tanggal_waktu' => now()
+        // Update data barang masuk
+        $barangMasuk = Barang::findOrFail($id);
+        $barangMasuk->update([
+            'kode_barang' => $request->kode_barang,
+            'nama_barang' => $request->nama_barang,
+            'uom' => $request->uom,
+            'kuantitas' => $request->kuantitas,
+            'tanggal' => $request->tanggal,
+            'nama_penerima' => $request->nama_penerima,
+            'departemen' => $request->departmen,
+            
         ]);
 
-        return redirect()->route('barang_masuk.index')->with('success', 'Stok barang berhasil ditambah.');
+        return redirect()->route('barangMasuk.index')->with('success', 'Barang masuk berhasil diupdate');
     }
 
-    // Mengupdate data barang masuk
-    public function update(Request $request, $id)
-{
-    // Validasi input jumlah barang masuk
-    $validatedData = $request->validate([
-        'masuk' => 'required|integer|min:1',
-    ]);
-
-    // Ambil data barang dari tabel Barang berdasarkan ID
-    $barang = Barang::findOrFail($id);
-
-    // Tambahkan jumlah barang masuk ke stok yang ada
-    $barang->stok += $validatedData['masuk'];
-    $barang->save();
-
-    // Redirect kembali ke halaman barang masuk dengan pesan sukses
-    return redirect()->route('barang_masuk.index')->with('success', 'Barang masuk berhasil ditambahkan.');
-}
-
-
-    // Menghapus data barang masuk
     public function destroy($id)
     {
-        // Logika untuk menghapus data barang masuk
+        // Hapus data barang masuk
+        $barangMasuk = Barang::findOrFail($id);
+        $barangMasuk->delete();
+
+        return redirect()->route('barangMasuk.index')->with('success', 'Barang masuk berhasil dihapus');
     }
 
-    // Menampilkan riwayat barang masuk
-    public function riwayat()
+    public function search(Request $request)
     {
-        // Logika untuk menampilkan riwayat barang masuk
+        $request->validate([
+            'query' => 'required|string',
+        ]);
+
+        $query = $request->input('query');
+
+        // Cari barang di tabel BarangKeluar
+        $barangMasuk = BarangMasuk::where('kode_barang', 'LIKE', "%{$query}%")
+            ->orWhere('nama_barang', 'LIKE', "%{$query}%")
+            ->paginate(10);
+
+        return view('pages.barang_masuk.index', compact('barangMasuk'));
     }
 
-    public function exportBarangMasuk()
+    public function import()
     {
-        return Excel::download(new BarangExport, 'log-barang-masuk.xlsx');
+        return view('pages.barang_masuk.import');
     }
+
+    public function importStore(Request $request)
+    {
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls',
+        ]);
+
+        Excel::import(new BarangMasukImport, $request->file('file_excel'));
+
+        return redirect()->route('barang_masuk.index')->with('success', 'Import Data Sukses');
+    }
+
+    public function export(Request $request)
+    {
+        $bulan = $request->input('bulan'); // Ambil bulan dari input form
+        return Excel::download(new BarangMasukExport($bulan), 'barang_masuk.xlsx');
+    }
+
 }

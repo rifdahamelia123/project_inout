@@ -4,7 +4,7 @@
             <a href="index.html">InOutWarehouse</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="index.html">SKD</a>
+            <a href="index.html">InOut</a>
         </div>
         
         <ul class="sidebar-menu">
@@ -36,22 +36,6 @@
                     </li>
                 </ul>
             </li>
-
-            <!-- Link ke Log Barang -->
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link has-dropdown">
-                    <i class="fas fa-book"></i><span>Log Barang</span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a class="nav-link" href="{{ route('log_masuk.index') }}">Log Barang Masuk</a>
-                    </li>
-                    <li>
-                    <li><a class="nav-link" href="{{ route('log_keluar.index') }}">Log Barang Keluar</a>
-                    </li>
-
-                    </li>
-                </ul>
             </li>
         </ul>
     </aside>

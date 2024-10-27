@@ -17,27 +17,19 @@ class BarangKeluarSeeder extends Seeder
         // Buat data dummy untuk tabel barang_keluar
         $data = [
             [
-                'kode_barang' => '1',
-                'nama_barang' => 'Barang Keluar 1',
-                'tanggal_waktu' => now(),
+                'kode_barang' => 'A-001',
+                'nama_barang' => strtoupper('kertas hvs'),
+                'uom' => strtoupper('Rim/Box'),
                 'kuantitas' => 10,
-                'user' => 'Admin',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'tanggal' => '2024-04-18',
+                'nama_penerima' => 'rifdah',
+                'departemen' => strtoupper('coe'), 
+                'jabatan' => 'magang IT',
+                'keperluan' => 'office'
             ],
-            [
-                'kode_barang' => '2',
-                'nama_barang' => 'Barang Keluar 2',
-                'tanggal_waktu' => now(),
-                'kuantitas' => 5,
-                'user' => 'Admin',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            // Tambahkan data lain sesuai kebutuhan
         ];
 
-        // Masukkan data ke dalam tabel menggunakan DB::table
-        //DB::table('barang_keluar')->insert($data);
+        // Masukkan data ke dalam tabel
+        DB::table('barang_keluar')->insert($data);
     }
 }

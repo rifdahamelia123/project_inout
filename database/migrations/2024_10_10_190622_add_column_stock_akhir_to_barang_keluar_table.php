@@ -11,9 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('barang_keluar', function (Blueprint $table) {
-            $table->integer('stok_akhir')->after('keluar');
-        });
+       
     }
 
     /**
@@ -21,8 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('barang_keluar', function (Blueprint $table) {
-            $table->dropColumn('stok_akhir');
-        });
+       
     }
 };

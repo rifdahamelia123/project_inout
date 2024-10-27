@@ -11,28 +11,35 @@
         @endif
 
         <table class="table">
-            <thead>
+        <thead>
                 <tr>
                     <th>ID</th>
                     <th>Kode Barang</th>
                     <th>Nama Barang</th>
-                    <th>Tanggal Waktu</th>
+                    <th>UOM</th>
                     <th>Kuantitas</th>
-                    <th>User</th>
+                    <th>Tanggal</th>
+                    <th>Nama Penerima</th>
+                    <th>Departemen</th>
+                    <th>Jataban</th>
+                    <th>Keperluan</th>
                     <th>Created At</th>
-                    <th>Updated At</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($barangKeluar as $barang)
+                @foreach ($barangMasuk as $barang)
                     <tr>
                         <td>{{ $barang->id }}</td>
                         <td>{{ $barang->kode_barang }}</td>
                         <td>{{ $barang->nama_barang }}</td>
-                        <td>{{ $barang->tanggal_waktu }}</td>
+                        <td>{{ strtoupper($barang->uom) }}</td>
                         <td>{{ $barang->kuantitas }}</td>
+                        <td>{{ $barang->tanggal }}</td>
+                        <td>{{ $barang->nama_penerima }}</td>
+                        <td>{{ $barang->departemen }}</td>
+                        <td>{{ $barabg->jabatan}}</td>
+                        <td>{{ $barang->keperluan}}</td>
                         <td>{{ $barang->created_at }}</td>
-                        <td>{{ $barang->updated_at }}</td>
                     </tr>
                 @endforeach
             </tbody>

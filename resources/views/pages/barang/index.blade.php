@@ -22,8 +22,8 @@
                             <div class="card-header">
                                 <h4>Daftar Barang</h4>
                                 <div class="card-header-action d-flex justify-content-between align-items-center">
-                                <a href="{{ route ('barang.import')}}" class="btn btn-success me-2">IMPOR EXCEL</a>
-                                <a href="{{ route('barang.create') }}" class="btn btn-success me-2">Tambah Barang</a>
+                                <a href="{{ route ('barang.import')}}" class="btn btn-primary me-2">IMPORT EXCEL</a>
+                                <a href="{{ route('barang.create') }}" class="btn btn-primary me-2">Tambah Barang</a>
                                 <form action="{{ route('barang.search') }}" method="GET" class="d-flex">
                                     <input type="text" class="form-control me-2" name="query" placeholder="Cari Barang" required style="width: 100px;">
                                     <button type="submit" class="btn btn-primary">
@@ -35,40 +35,58 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-md">
-                                        <thead>
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kode Barang</th>
+                                            <th>Nama Barang</th>
+                                            <th>Ukuran</th>
+                                            <th>UOM</th>
+                                            <th>Concatenate C&D</th> 
+                                            <th>Upper Description</th>
+                                            <th>Upper UOM</th>
+                                            <th>Stok</th>
+                                            <th>Tanggal</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($barang as $item)
                                             <tr>
-                                                <th>No</th>
-                                                <th>Kode Barang</th>
-                                                <th>Nama Barang</th>
-                                                <th>Tanggal Waktu</th>
-                                                <th>Stok</th>
-                                                <th>Aksi</th>
+                                                <td>{{ $loop->iteration + ($barang->currentPage() - 1) * $barang->perPage() }}</td>
+                                                <td>{{ $item->kode_barang }}</td>
+                                                <td>{{ $item->nama_barang }}</td>
+                                                <td>{{ $item->ukuran }}</td>
+                                                <td>{{ $item->satuan }}</td>
+                                                <td>{{ $item->concatenate_c_and_d }}</td> 
+                                                <td>{{ strtoupper($item->upper_description) }}</td>
+                                                <td>{{ strtoupper($item->upper_uom) }}</td> 
+                                                <td>{{ $item->stok }}</td>
+                                                <td>{{ $item->tanggal }}</td>
+                                                <td>
+                                                    <a href="{{ route('barang.edit', $item->kode_barang) }}" class="btn btn-sm btn-info btn-icon">
+                                                    <i class="fas fa-edit"></i> edit </a>
+                                                    <form action="{{ route('barang.destroy', $item->kode_barang) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger btn-icon confirm-delete" onclick="return confirm('Apakah kamu yakin ingin menghapus barang ini?')">
+                                                        <i class="fas fa-times"></i> Hapus
+                                                        </button>
+                                                    </form>
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($barang as $item)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $item->kode_barang }}</td>
-                                                    <td>{{ $item->nama_barang }}</td>
-                                                    <td>{{ $item->tanggal_waktu}}</td>
-                                                    <td>{{ $item->stok}}</td>
-                                                    <td>
-                                                        <a href="{{ route('barang.edit', $item->kode_barang) }}" class="btn btn-sm btn-info btn-icon">
-                                                        <i class="fas fa-edit"></i> Edit
-                                                        </a>
-                                                        <form action="{{ route('barang.destroy', $item->kode_barang) }}" method="POST" style="display: inline-block;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-danger btn-icon confirm-delete" onclick="return confirm('Are you sure?')">
-                                                            <i class="fas fa-times"></i> Hapus
-                                                            </button>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
+                                        @endforeach
+                                    </tbody>
                                     </table>
+                                    <!-- Menampilkan pagination -->
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            Menampilkan {{ $barang->firstItem() }} sampai {{ $barang->lastItem() }} dari {{ $barang->total() }} data
+                                        </div>
+                                        <div>
+                                            {{ $barang->links() }} <!-- Pagination controls -->
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

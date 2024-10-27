@@ -29,14 +29,23 @@
                                 <h4>Edit Barang</h4>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('barang.update', $barang->kode_barang) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
+                            <form action="{{ route('barang.update', $barang->kode_barang) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                        @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
 
                                     <div class="form-group">
                                         <label for="kode_barang">Kode Barang</label>
                                         <input type="text" class="form-control" id="kode_barang" name="kode_barang" value="{{ old('kode_barang', $barang->kode_barang) }}" required>
-                                    </div>
+                                        </div>
 
                                     <div class="form-group">
                                         <label for="nama_barang">Nama Barang</label>
@@ -44,13 +53,28 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="nama_barang">Stok</label>
+                                        <label for="ukuran">Ukuran</label>
+                                        <input type="text" class="form-control" id="ukuran" name="ukuran" value="{{ old('ukuran', $barang->ukuran) }}" required>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <label for="satuan">Satuan</label>
+                                        <input type="text" class="form-control" id="satuan" name="satuan" value="{{ old('satuan', $barang->satuan) }}" required>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <label for="stok">Stok</label>
                                         <input type="text" class="form-control" id="stok" name="stok" value="{{ old('stok', $barang->stok) }}" required>
                                     </div>
-                                
-                                    <button type="submit" class="btn btn-info">Update</button>
+                                    <div class="form-group">
+                                        <label for="tanggal">Tanggal</label>
+                                        <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ old('tanggal') }}" required>
+                                    </div>
+                                    
+
+                                    <button type="submit" class="btn btn-info">Simpan</button>
+                                    <a href="{{ route('barang_masuk.index') }}" class="btn btn-secondary">Kembali</a>
                                 </form>
-                                
                             </div>
                         </div>
                     </div>
@@ -66,3 +90,4 @@
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/features-posts.js') }}"></script>
 @endpush
+                                                                                                                                                                                  

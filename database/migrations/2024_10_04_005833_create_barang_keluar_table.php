@@ -15,11 +15,15 @@ class CreateBarangKeluarTable extends Migration
     {
         Schema::create('barang_keluar', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_barang');
-            $table->string('nama_barang');
-            $table->integer('stok');
-            $table->integer('keluar');
-            $table->integer('stok_akhir')->default(0)->change();
+            $table->string('kode_barang')->nullable();
+            $table->string('nama_barang')->nullable();
+            $table->string('uom')->nullable();
+            $table->integer('kuantitas')->nullable();
+            $table->date('tanggal')->nullable();       
+            $table->string('nama_penerima')->nullable();
+            $table->string('departemen')->nullable();
+            $table->string('jabatan')->nullable();
+            $table->string('keperluan')->nullable();
             $table->timestamps();
         });
     }

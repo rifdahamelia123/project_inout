@@ -19,10 +19,13 @@
     @stack('style')
 
     <!-- Template CSS -->
-    <link rel="stylesheet"
-        href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet"
-        href="{{ asset('css/components.css') }}">
+<link rel="stylesheet"
+      href="{{ asset('css/style.css') }}">
+<link rel="stylesheet"
+      href="{{ asset('css/components.css') }}">
+<link rel="stylesheet"
+      href="{{ asset('css/styles.css') }}"> 
+
 
     <!-- Start GA -->
     <script async
@@ -72,6 +75,8 @@
     <!-- Template JS File -->
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
+
+    
 </body>
 
 </html>

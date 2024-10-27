@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up()
     {
-    Schema::table('barang_masuk', function (Blueprint $table) {
-        $table->integer('stok_akhir')->after('masuk');
-    });
+   
     }
 
     public function down()
     {
-    Schema::table('barang_masuk', function (Blueprint $table) {
-        $table->dropColumn('stok_akhir');
-    });
+   
     }
 
 };

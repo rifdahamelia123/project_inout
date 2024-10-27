@@ -38,26 +38,54 @@
                                         </ul>
                                     </div>
                                 @endif
-                                <form action="{{ route('barang_keluar.kurang', $item_keluar->kode_barang) }}" method="POST">
-                                @csrf
-                                @method('PUT') <!-- Pastikan method ini adalah PUT -->
-                                <div class="form-group">
-                                    <label for="kode_barang">Kode Barang</label>
-                                    <input type="text" class="form-control" id="kode_barang" name="kode_barang" value="{{ old('kode_barang', $item_keluar->kode_barang) }}" readonly>
-                                </div>
 
-                                <div class="form-group">
-                                    <label for="nama_barang">Nama Barang</label>
-                                    <input type="text" class="form-control" id="nama_barang" name="nama_barang" value="{{ old('nama_barang', $item_keluar->nama_barang) }}" readonly>
-                                </div>
+                                <form action="{{ route('barang_keluar.tambah', $item_keluar->kode_barang) }}" method="POST">
+                                    @csrf
+                                    @method('GET')
 
-                                <div class="form-group">
-                                    <label for="keluar">Kuantitas Keluar</label>
-                                    <input type="number" class="form-control" id="keluar" name="keluar" value="{{ old('keluar') }}" required>
-                                </div>
+                                    <div class="form-group">
+                                        <label for="kode_barang">Kode Barang</label>
+                                        <input type="text" class="form-control" id="kode_barang" name="kode_barang" value="{{ old('kode_barang', $item_keluar->kode_barang) }}" required>
+                                    </div>
 
-                                <button type="submit" class="btn btn-info">Submit</button>
-                            </form>
+                                    <div class="form-group">
+                                        <label for="nama_barang">Nama Barang</label>
+                                        <input type="text" class="form-control" id="nama_barang" name="nama_barang" value="{{ old('nama_barang', $item_keluar->nama_barang) }}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="uom">UOM</label>
+                                        <input type="text" class="form-control" id="uom" name="uom" value="{{ old('uom', $item_keluar->uom) }}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="kuantitas">Kuantitas</label>
+                                        <input type="text" class="form-control" id="kuantitas" name="kuantitas" value="{{ old('kuantitas', $item_keluar->kuantitas) }}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="nama_penerima">Nama Penerima</label>
+                                        <input type="text" class="form-control" id="nama_penerima" name="nama_penerima" value="{{ old('nama_penerima',$item_keluar->nama_penerima) }}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="departemen">Departemen</label>
+                                        <input type="text" class="form-control" id="departemen" name="departemen" value="{{ old('departemen', $item_keluar->departemen) }}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="jabatan">Jabatan</label>
+                                        <input type="text" class="form-control" id="jabatan" name="jabatan" value="{{ old('jabatan', $item_keluar->jabatan) }}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="keperluan">Keperluan</label>
+                                        <input type="text" class="form-control" id="keperluan" name="keperluan" value="{{ old('keperluan', $item_keluar->keperluan) }}" required>
+                                    </div>
+
+
+                                    <button type="submit" class="btn btn-info">Submit</button>
+                                </form>
                             </div>
                         </div>
                     </div>

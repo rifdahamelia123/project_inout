@@ -9,7 +9,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Tambah Barang Masuk</h1>
+                <h1>Edit Barang Masuk</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="{{ url('home') }}">Dashboard</a></div>
                     <div class="breadcrumb-item"><a href="{{ route('barang_masuk.index') }}">Barang Masuk</a></div>
@@ -45,23 +45,34 @@
 
                                     <div class="form-group">
                                         <label for="kode_barang">Kode Barang</label>
-                                        <input type="text" class="form-control" id="kode_barang" name="kode_barang" value="{{ old('kode_masuk', $item_masuk->kode_barang) }}" readonly>
+                                        <input type="text" class="form-control" id="kode_barang" name="kode_barang" value="{{ old('kode_barang', $item_masuk->kode_barang) }}" required>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="nama_barang">Nama Barang</label>
-                                        <input type="text" class="form-control" id="nama_barang" name="nama_barang" value="{{ old('nama_masuk', $item_masuk->nama_barang) }}" readonly>
+                                        <input type="text" class="form-control" id="nama_barang" name="nama_barang" value="{{ old('nama_barang', $item_masuk->nama_barang) }}" required>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="kuantitas">Stok</label>
-                                        <input type="text" class="form-control" id="stok" name="stok" value="{{ old('stok', $item_masuk->stok) }}" readonly>
+                                        <label for="uom">UOM</label>
+                                        <input type="text" class="form-control" id="uom" name="uom" value="{{ old('uom', $item_masuk->uom) }}" required>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="kuantitas">Kuantitas Masuk</label>
-                                        <input type="number" class="form-control" id="masuk" name="masuk" value="" required>
+                                        <label for="kuantitas">Kuantitas</label>
+                                        <input type="text" class="form-control" id="kuantitas" name="kuantitas" value="{{ old('kuantitas', $item_masuk->kuantitas) }}" required>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label for="nama_penerima">Nama Penerima</label>
+                                        <input type="text" class="form-control" id="nama_penerima" name="nama_penerima" value="{{ old('nama_penerima', $item_masuk->nama_penerima) }}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="departemen">Departemen</label>
+                                        <input type="text" class="form-control" id="departemen" name="departmen" value="{{ old('departemen', $item_masuk->departemen) }}" required>
+                                    </div>
+
                                     <button type="submit" class="btn btn-info">Submit</button>
                                 </form>
                             </div>

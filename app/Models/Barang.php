@@ -15,16 +15,35 @@ class Barang extends Model
 
     protected $table = 'barang';
     protected $primaryKey = 'kode_barang';
-    public $incrementing = false; // Because kode_barang is not an auto-incrementing primary key
+    public $incrementing = false; 
     protected $keyType = 'integer';
 
 
     protected $fillable = [
         'kode_barang',
         'nama_barang',
-        'tanggal_waktu',
+        'ukuran',
+        'satuan',
+        'concatenate_c_and_d',
+        'upper_description',
+        'upper_uom',
         'stok',
+        'tanggal',
     ];
+
+     // Mutator untuk concatenate_c_and_d
+     public function setConcatenateCAndDAttribute($value)
+     {
+         $this->attributes['concatenate_c_and_d'] = ($this->nama_barang . ' ' . $this->ukuran);
+     }
+ 
+     // Mutator untuk upper_uom
+     public function setUpperUomAttribute($value)
+     {
+         $this->attributes['upper_uom'] = strtoupper($this->satuan);
+     }
+    
+    
     public function barangMasuk()
     {
         return $this->hasMany(BarangMasuk::class);

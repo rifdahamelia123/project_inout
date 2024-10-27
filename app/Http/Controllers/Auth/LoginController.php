@@ -1,22 +1,40 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
-
-use App\Http\Controllers\Controller;
+namespace app\Http\Controllers\Auth;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class LoginController extends Controller
+
+class AuthController extends Controller
 {
-    public function logout(Request $request)
+    public function login(Request $request)
     {
+        // Validasi permintaan
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-        return "hu";
-        /*Auth::logout();
+        // Ambil kredensial
+        $credentials = $request->only('email', 'password');
 
-        $request->session()->invalidate();
+        // Coba untuk login pengguna
+        if (Auth::attempt($credentials)) {
+            // Login berhasil, redirect ke halaman yang dimaksud
+            return redirect()->intended('dashboard');
+        }
 
-        $request->session()->regenerateToken();
+        // Jika otentikasi gagal
+        return back()->withErrors([
+            'email' => 'Kredensial yang diberikan tidak cocok dengan catatan kami.',
+        ]);
+    }
 
-        return redirect('/');*/
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/'); // Redirect ke halaman utama atau halaman login
     }
 }
+
