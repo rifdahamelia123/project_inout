@@ -79,9 +79,8 @@
                                         <label for="max">Max</label>
                                         <input type="number" class="form-control" id="max" name="max" value="{{ old('max') }}" required>
                                     </div>
-
                                     <button type="submit" class="btn btn-info">Simpan</button>
-                                    <a href="{{ route('barang_masuk.index') }}" class="btn btn-secondary">Kembali</a>
+                                    <a href="{{ route('barang.index') }}" class="btn btn-secondary">Kembali</a>
                                 </form>
                             </div>
                         </div>

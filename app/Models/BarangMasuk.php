@@ -14,13 +14,21 @@ class BarangMasuk extends Model
     protected $fillable = [
         'kode_barang',
         'nama_barang',
+        'concatenate_c_and_d', 
+        'upper_description',
+        'upper_uom',
         'uom',
-        'kuantitas',
-        'tanggal',
+        'stok',
+        'masuk',
+        'stok_akhir',
         'nama_penerima',
-        'departemen'
+        'departemen',
     ];
     
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class);
+    }
 
     // Timestamps
     public $timestamps = true;

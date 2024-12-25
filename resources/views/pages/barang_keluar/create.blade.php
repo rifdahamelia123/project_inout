@@ -29,7 +29,6 @@
                                 <h4>Tambah Barang Keluar</h4>
                             </div>
                             <div class="card-body">
-                                <!-- Ubah ke route barang_masuk.store -->
                                     <form action="{{ route('barang_keluar.store') }}" method="POST">
                                     @csrf
 
@@ -40,7 +39,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="nama_barang">Nama Barang</label>
                                         <input type="text" name="nama_barang" class="form-control @error('nama_barang') is-invalid @enderror" value="{{ old('nama_barang') }}" required>
@@ -48,7 +47,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="uom">UOM</label>
                                         <input type="text" name="uom" class="form-control @error('uom') is-invalid @enderror" value="{{ old('uom') }}">
@@ -56,7 +55,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="kuantitas">Kuantitas</label>
                                         <input type="number" name="kuantitas" class="form-control @error('kuantitas') is-invalid @enderror" value="{{ old('kuantitas') }}" required>
@@ -72,7 +71,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="nama_penerima">Nama Penerima</label>
                                         <input type="text" name="nama_penerima" class="form-control @error('nama_penerima') is-invalid @enderror" value="{{ old('nama_penerima') }}" required>
@@ -80,7 +79,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="departemen">Departemen</label>
                                         <input type="text" name="departemen" class="form-control @error('departemen') is-invalid @enderror" value="{{ old('departemen') }}" required>
@@ -120,5 +119,5 @@
 @push('scripts')
     <!-- JS Libraries -->
     <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
-    
+
 @endpush

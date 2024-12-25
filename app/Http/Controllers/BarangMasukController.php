@@ -12,101 +12,153 @@ use Maatwebsite\Excel\Facades\Excel;
 class BarangMasukController extends Controller
 {
 
-    public function index(Request $request)
+    public function index()
     {
-        $bulan = $request->input('bulan'); // Mendapatkan input bulan dari form
-
-        if ($bulan) {
-            // Jika bulan dipilih, ambil data berdasarkan bulan dan tahun
-            $barangMasuk = BarangMasuk::whereMonth('tanggal', '=', date('m', strtotime($bulan)))
-                ->whereYear('tanggal', '=', date('Y', strtotime($bulan)))
-                ->paginate(7);
-        } else {
-            // Jika tidak ada bulan dipilih, tampilkan semua data
-            $barangMasuk = BarangMasuk::paginate(7);
-        }
-
-        return view('pages.barang_masuk.index', compact('barangMasuk'));
+    $barangMasuk = Barang::paginate(7);
+    return view('pages.barang_masuk.index', compact('barangMasuk'));
     }
 
     public function create()
     {
-        // Menampilkan form untuk menambah barang masuk
-        return view('pages.barang_masuk.create');
+        $barang = Barang::all();
+        return view('pages.barang_masuk.create', compact('barang'));
     }
 
     public function store(Request $request)
     {
-        // Validasi input
-        $request->validate([
-            'kode_barang' => 'required|string',
-            'nama_barang' => 'required|string',
-            'uom' => 'required|string',
-            'kuantitas' => 'required|integer',
-            'tanggal' => 'required|date',
+        // Validasi input permintaan
+        $validatedData = $request->validate([
+            'kode_barang' => 'required|string|exists:barang,kode_barang',
+            'kuantitas' => 'required|integer|min:1',
             'nama_penerima' => 'required|string',
             'departemen' => 'required|string',
         ]);
 
-        // Simpan data barang masuk
+        // Temukan barang di tabel `barang` berdasarkan `kode_barang`
+        $barang = Barang::where('kode_barang', $validatedData['kode_barang'])->first();
+
+        $dashboardInout = $barang->dashboardInout; // Pastikan ini benar
+        if (!$dashboardInout) {
+            // Menangani kasus jika data dashboard tidak ada
+            return redirect()->back()->withErrors('Data dashboard tidak ditemukan untuk item ini.');
+        }
+
+        // Perbarui stok di tabel `barang`
+        $barang->stok += $validatedData['kuantitas'];
+
+        // Logika untuk memperbarui Order Qty dan Remark di tabel Dashboard
+        $minValue = $dashboardInout->min; // Pastikan Anda mengambil dari $dashboardInout
+
+        if ($barang->stok < $minValue) {
+            // Jika stok di bawah nilai minimum, set Order Qty dan Remark
+            $dashboardInout->order_qty = $minValue - $barang->stok;
+            $dashboardInout->remark = 'ORDER';
+        } else {
+            // Jika stok aman, set Order Qty ke 0 dan Remark ke 'Aman'
+            $dashboardInout->order_qty = 0;
+            $dashboardInout->remark = 'AMAN';
+        }
+
+        // Simpan perubahan
+        $barang->save();
+        $dashboardInout->save(); // Pastikan Anda menyimpan pada objek yang benar
+
+        // Simpan data ke tabel `barang_masuk`
         BarangMasuk::create([
-            'kode_barang' => $request->kode_barang,
-            'nama_barang' => $request->nama_barang,
-            'uom' => $request->uom,
-            'kuantitas' => $request->kuantitas,
-            'tanggal' => $request->tanggal,
-            'nama_penerima' => $request->nama_penerima,
-            'departemen' => $request->departemen,
-            'tipe' => 'masuk', 
+            'kode_barang' => $barang->kode_barang,
+            'nama_barang' => $barang->nama_barang,
+            'uom' => $barang->satuan,
+            'concatenate_c_and_d' => $barang->kode_barang . '-' . $barang->satuan,
+            'stok' => $barang->stok - $validatedData['kuantitas'],
+            'masuk' => $validatedData['kuantitas'],
+            'stok_akhir' => $barang->stok,
+            'tanggal' => now(),
+            'nama_penerima' => $validatedData['nama_penerima'],
+            'departemen' => $validatedData['departemen'],
         ]);
 
-        return redirect()->route('barang_masuk.index')->with('success', 'Barang berhasil ditambahkan!');
+        return redirect()->route('barang_masuk.index')->with('success', 'Stok barang berhasil ditambahkan.');
     }
 
-    public function edit($kode_barang)
+
+    public function edit($id)
     {
-        // Cari data barang masuk berdasarkan kode_barang
-        $item_masuk = BarangMasuk::where('kode_barang', $kode_barang)->first();
-    
-        // Pastikan variabel dikirim ke view
+        // Ambil data barang berdasarkan ID dari tabel Barang
+        $item_masuk = Barang::findOrFail($id);
+
+        // Kirim data barang ke view form untuk ditampilkan dan diedit
         return view('pages.barang_masuk.edit', compact('item_masuk'));
     }
-    
-    public function tambah($id)
-    {
-        $barangMasuk = BarangMasuk::findOrFail($id);
-        return view('barang_masuk.tambah', compact('barang'));
-    }
+
+
+    public function tambah(Request $request, $id)
+{
+    // Validasi input
+    $validatedData = $request->validate([
+        'masuk' => 'required|integer|min:1',
+        'nama_penerima' => 'required|string',
+        'departemen' => 'required|string',
+    ]);
+
+    // Temukan barang berdasarkan ID
+    $barang = Barang::findOrFail($id);
+
+    // Ambil stok awal
+    $stok_awal = $barang->stok;
+
+    // Tambahkan stok barang
+    $barang->stok += $validatedData['masuk'];
+
+    // Update nilai IN pada tabel barang (menambahkan jumlah masuk ke nilai IN)
+    $barang->in = $validatedData['masuk'];
+    $barang->save();
+
+    // Hitung stok akhir
+    $stok_akhir = $barang->stok;
+
+    // Concatenate dan uppercase UOM
+    $concatenate = $barang->nama_barang . ' ' . $barang->ukuran;
+    $upperDescription = strtoupper($concatenate);
+    $upperUom = strtoupper($barang->satuan);
+
+    // Simpan riwayat barang masuk ke tabel barang_masuk
+    BarangMasuk::create([
+        'kode_barang' => $barang->kode_barang,
+        'nama_barang' => $barang->nama_barang,
+        'uom' => $barang->satuan,
+        'concatenate_c_and_d' => $concatenate,
+        'upper_description' => $upperDescription,
+        'upper_uom' => $upperUom,
+        'stok' => $stok_awal,
+        'masuk' => $validatedData['masuk'],
+        'stok_akhir' => $stok_akhir,
+        'nama_penerima' => $validatedData['nama_penerima'],
+        'departemen' => $validatedData['departemen'],
+    ]);
+
+    return redirect()->route('barang_masuk.index')->with('success', 'Stok barang berhasil ditambahkan.');
+}
 
 
     public function update(Request $request, $id)
     {
-        // Validasi input
-        $request->validate([
-            'kode_barang' => 'required|string',
-            'nama_barang' => 'required|string',
-            'uom' => 'required|string',
-            'kuantitas' => 'required|integer',
-            'tanggal' => 'required|date',
-            'nama_penerima' => 'required|date',
-            'departemen' => 'required|date',
+        // Validasi input jumlah barang masuk
+        $validatedData = $request->validate([
+            'masuk' => 'required|integer|min:1',
         ]);
 
-        // Update data barang masuk
-        $barangMasuk = Barang::findOrFail($id);
-        $barangMasuk->update([
-            'kode_barang' => $request->kode_barang,
-            'nama_barang' => $request->nama_barang,
-            'uom' => $request->uom,
-            'kuantitas' => $request->kuantitas,
-            'tanggal' => $request->tanggal,
-            'nama_penerima' => $request->nama_penerima,
-            'departemen' => $request->departmen,
-            
-        ]);
+        // Ambil data barang dari tabel Barang berdasarkan ID
+        $barang = Barang::findOrFail($id);
 
-        return redirect()->route('barangMasuk.index')->with('success', 'Barang masuk berhasil diupdate');
+        // Tambahkan jumlah barang masuk ke stok yang ada
+        $barang->stok += $validatedData['masuk'];
+        $barang->save();
+
+        // Redirect kembali ke halaman barang masuk dengan pesan sukses
+        return redirect()->route('barang_masuk.index')->with('success', 'Stok Barang berhasil ditambahkan.');
     }
+
+
 
     public function destroy($id)
     {
@@ -125,13 +177,15 @@ class BarangMasukController extends Controller
 
         $query = $request->input('query');
 
-        // Cari barang di tabel BarangKeluar
-        $barangMasuk = BarangMasuk::where('kode_barang', 'LIKE', "%{$query}%")
+        // Cari barang di tabel BarangMasuk
+        $barangMasuk = Barang::where('kode_barang', 'LIKE', "%{$query}%")
             ->orWhere('nama_barang', 'LIKE', "%{$query}%")
-            ->paginate(10);
+            ->paginate(7);
+        $barangMasuk->appends(['query' => $query]);
 
         return view('pages.barang_masuk.index', compact('barangMasuk'));
     }
+
 
     public function import()
     {

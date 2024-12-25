@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dashboard-simpadu', function (Blueprint $table) {
+        Schema::create('dashboard_inout', function (Blueprint $table) {
             $table->id();
             $table->string('kode_barang')->nullable();
             $table->string('nama_barang')->nullable();
@@ -21,17 +21,18 @@ return new class extends Migration
             $table->integer('in')->nullable();
             $table->integer('out')->nullable();
             $table->integer('stok');
-            $table->string('remark');
-            $table->integer('order_qty')->nullable();
+            $table->string('remark')->default('Aman');
+            $table->integer('order_qty')->default(0);
             $table->timestamps();
-        });
-    }
+    });
+}
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('dashboard-simpadu');
+        Schema::dropIfExists('dashboard_inout');
     }
 };

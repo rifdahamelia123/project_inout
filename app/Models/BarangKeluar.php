@@ -22,14 +22,22 @@ class BarangKeluar extends Model
     protected $fillable = [
         'kode_barang',
         'nama_barang',
+        'concatenate_c_and_d', 
+        'upper_description',
+        'upper_uom',
         'uom',
-        'kuantitas',
-        'tanggal',
+        'stok',
+        'keluar',
+        'stok_akhir',
         'nama_penerima',
         'departemen',
         'jabatan',
         'keperluan',
     ];
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class);
+    }
 
    
     // Timestamps

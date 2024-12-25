@@ -88,6 +88,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                    
 
                                     <button type="submit" class="btn btn-success">Simpan Barang Masuk</button>
                                     <a href="{{ route('barang_masuk.index') }}" class="btn btn-secondary">Kembali</a>

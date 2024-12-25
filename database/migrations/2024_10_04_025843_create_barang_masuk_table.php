@@ -10,13 +10,18 @@ return new class extends Migration
     {
         Schema::create('barang_masuk', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_barang')->nullable();
-            $table->string('nama_barang')->nullable();
-            $table->string('uom')->nullable();  
-            $table->integer('kuantitas')->nullable();
-            $table->date('tanggal')->nullable();            
-            $table->string('nama_penerima')->nullable();
-            $table->string('departemen')->nullable();
+            $table->string('kode_barang');
+            $table->string('nama_barang');
+            $table->string('ukuran')->nullable();
+            $table->string('uom');
+            $table->string('concatenate_c_and_d'); 
+            $table->string('upper_description');
+            $table->string('upper_uom');
+            $table->integer('stok');
+            $table->integer('masuk');
+            $table->integer('stok_akhir');
+            $table->string('nama_penerima');
+            $table->string('departemen');
             $table->timestamps();
             
         });

@@ -9,7 +9,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Edit Barang Keluar</h1>
+                <h1>Tambah Stok Barang Keluar</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="{{ url('home') }}">Dashboard</a></div>
                     <div class="breadcrumb-item"><a href="{{ route('barang_keluar.index') }}">Barang Keluar</a></div>
@@ -26,7 +26,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Edit Barang Keluar</h4>
+                                <h4>Stok Barang Keluar</h4>
                             </div>
                             <div class="card-body">
                                 @if ($errors->any())
@@ -45,46 +45,42 @@
 
                                     <div class="form-group">
                                         <label for="kode_barang">Kode Barang</label>
-                                        <input type="text" class="form-control" id="kode_barang" name="kode_barang" value="{{ old('kode_barang', $item_keluar->kode_barang) }}" required>
+                                        <input type="text" class="form-control" id="kode_barang" name="kode_barang" value="{{ old('kode_barang', $item_keluar->kode_barang) }}" readonly>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="nama_barang">Nama Barang</label>
-                                        <input type="text" class="form-control" id="nama_barang" name="nama_barang" value="{{ old('nama_barang', $item_keluar->nama_barang) }}" required>
+                                        <input type="text" class="form-control" id="nama_barang" name="nama_barang" value="{{ old('nama_barang', $item_keluar->nama_barang) }}" readonly>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="uom">UOM</label>
-                                        <input type="text" class="form-control" id="uom" name="uom" value="{{ old('uom', $item_keluar->uom) }}" required>
+                                        <input type="text" class="form-control" id="uom" name="uom" value="{{ old('uom', $item_keluar->uom) }}" readonly>
                                     </div>
-
                                     <div class="form-group">
-                                        <label for="kuantitas">Kuantitas</label>
-                                        <input type="text" class="form-control" id="kuantitas" name="kuantitas" value="{{ old('kuantitas', $item_keluar->kuantitas) }}" required>
+                                        <label for="kuantitas">Stok</label>
+                                        <input type="text" class="form-control" id="stok" name="stok" value="{{ old('stok', $item_keluar->stok) }}" readonly>
                                     </div>
-
+                                    <div class="form-group">
+                                        <label for="kuantitas">Kuantitas Keluar</label>
+                                        <input type="number" class="form-control" id="keluar" name="keluar" value="" required>
+                                    </div>
                                     <div class="form-group">
                                         <label for="nama_penerima">Nama Penerima</label>
                                         <input type="text" class="form-control" id="nama_penerima" name="nama_penerima" value="{{ old('nama_penerima',$item_keluar->nama_penerima) }}" required>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="departemen">Departemen</label>
                                         <input type="text" class="form-control" id="departemen" name="departemen" value="{{ old('departemen', $item_keluar->departemen) }}" required>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="jabatan">Jabatan</label>
                                         <input type="text" class="form-control" id="jabatan" name="jabatan" value="{{ old('jabatan', $item_keluar->jabatan) }}" required>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="keperluan">Keperluan</label>
                                         <input type="text" class="form-control" id="keperluan" name="keperluan" value="{{ old('keperluan', $item_keluar->keperluan) }}" required>
                                     </div>
-
-
                                     <button type="submit" class="btn btn-info">Submit</button>
+                                    <a href="{{ route('barang_keluar.index') }}" class="btn btn-secondary">Kembali</a>
                                 </form>
                             </div>
                         </div>

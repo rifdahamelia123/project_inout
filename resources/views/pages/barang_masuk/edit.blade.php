@@ -9,8 +9,8 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Edit Barang Masuk</h1>
-                <div class="section-header-breadcrumb">
+            <h1>Tambah Stok Barang Masuk</h1>
+            <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="{{ url('home') }}">Dashboard</a></div>
                     <div class="breadcrumb-item"><a href="{{ route('barang_masuk.index') }}">Barang Masuk</a></div>
                     <div class="breadcrumb-item">Edit</div>
@@ -26,7 +26,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Edit Barang Masuk</h4>
+                            <h4>Stok Barang Masuk</h4>
                             </div>
                             <div class="card-body">
                                 @if ($errors->any())
@@ -45,22 +45,25 @@
 
                                     <div class="form-group">
                                         <label for="kode_barang">Kode Barang</label>
-                                        <input type="text" class="form-control" id="kode_barang" name="kode_barang" value="{{ old('kode_barang', $item_masuk->kode_barang) }}" required>
+                                        <input type="text" class="form-control" id="kode_barang" name="kode_barang" value="{{ old('kode_barang', $item_masuk->kode_barang) }}" readonly>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="nama_barang">Nama Barang</label>
-                                        <input type="text" class="form-control" id="nama_barang" name="nama_barang" value="{{ old('nama_barang', $item_masuk->nama_barang) }}" required>
+                                        <input type="text" class="form-control" id="nama_barang" name="nama_barang" value="{{ old('nama_barang', $item_masuk->nama_barang) }}" readonly>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="uom">UOM</label>
-                                        <input type="text" class="form-control" id="uom" name="uom" value="{{ old('uom', $item_masuk->uom) }}" required>
+                                        <input type="text" class="form-control" id="uom" name="uom" value="{{ old('uom', $item_masuk->uom) }}" readonly>
                                     </div>
-
                                     <div class="form-group">
-                                        <label for="kuantitas">Kuantitas</label>
-                                        <input type="text" class="form-control" id="kuantitas" name="kuantitas" value="{{ old('kuantitas', $item_masuk->kuantitas) }}" required>
+                                        <label for="kuantitas">Stok</label>
+                                        <input type="text" class="form-control" id="stok" name="stok" value="{{ old('stok', $item_masuk->stok) }}" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="kuantitas">Jumlah Stok Masuk</label>
+                                        <input type="number" class="form-control" id="masuk" name="masuk" value="" required>
                                     </div>
 
                                     <div class="form-group">
@@ -70,10 +73,11 @@
 
                                     <div class="form-group">
                                         <label for="departemen">Departemen</label>
-                                        <input type="text" class="form-control" id="departemen" name="departmen" value="{{ old('departemen', $item_masuk->departemen) }}" required>
+                                        <input type="text" class="form-control" id="departemen" name="departemen" value="{{ old('departemen', $item_masuk->departemen) }}" required>
                                     </div>
 
                                     <button type="submit" class="btn btn-info">Submit</button>
+                                    <a href="{{ route('barang_masuk.index') }}" class="btn btn-secondary">Kembali</a>
                                 </form>
                             </div>
                         </div>

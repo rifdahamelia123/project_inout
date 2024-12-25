@@ -68,12 +68,18 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="tanggal">Tanggal</label>
-                                        <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ old('tanggal') }}" required>
+                                        <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ old('tanggal', $barang->tanggal) }}" required>
                                     </div>
-                                    
-
+                                    <div class="form-group">
+                                        <label for="min">Min</label>
+                                        <input type="min" class="form-control" id="min" name="min" value="{{ old('min', $barang->min) }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="max">Max</label>
+                                        <input type="max" class="form-control" id="max" name="max" value="{{ old('max', $barang->max) }}" required>
+                                    </div>
                                     <button type="submit" class="btn btn-info">Simpan</button>
-                                    <a href="{{ route('barang_masuk.index') }}" class="btn btn-secondary">Kembali</a>
+                                    <a href="{{ route('barang.index') }}" class="btn btn-secondary">Kembali</a>
                                 </form>
                             </div>
                         </div>

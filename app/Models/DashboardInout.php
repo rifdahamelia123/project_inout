@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DashboardSimpadu extends Model
+class DashboardInout extends Model
 {
     use HasFactory;
 
-    protected $table = 'dashboard-simpadu';
+    protected $table = 'dashboard_inout';
 
     protected $fillable = [
         'kode_barang',
@@ -23,4 +23,11 @@ class DashboardSimpadu extends Model
         'remark',
         'order_qty',
     ];
+
+    public function getOrderQtyAttribute()
+    {
+        // Menghitung order quantity hanya jika stok saat ini kurang dari minimum
+        return $this->stok < $this->min ? $this->min - $this->stok : 0;
+    }
 }
+

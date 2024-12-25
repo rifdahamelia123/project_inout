@@ -42,7 +42,7 @@
                                             <th>Nama Barang</th>
                                             <th>Ukuran</th>
                                             <th>UOM</th>
-                                            <th>Concatenate C&D</th> 
+                                            <th>Concatenate C&D</th>
                                             <th>Upper Description</th>
                                             <th>Upper UOM</th>
                                             <th>Stok</th>
@@ -58,9 +58,9 @@
                                                 <td>{{ $item->nama_barang }}</td>
                                                 <td>{{ $item->ukuran }}</td>
                                                 <td>{{ $item->satuan }}</td>
-                                                <td>{{ $item->concatenate_c_and_d }}</td> 
+                                                <td>{{ $item->concatenate_c_and_d }}</td>
                                                 <td>{{ strtoupper($item->upper_description) }}</td>
-                                                <td>{{ strtoupper($item->upper_uom) }}</td> 
+                                                <td>{{ strtoupper($item->upper_uom) }}</td>
                                                 <td>{{ $item->stok }}</td>
                                                 <td>{{ $item->tanggal }}</td>
                                                 <td>

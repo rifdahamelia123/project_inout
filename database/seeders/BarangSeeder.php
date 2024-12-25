@@ -26,6 +26,13 @@ class BarangSeeder extends Seeder
                 'upper_uom' => strtoupper('Rim/Box'),
                 'stok' => 100,
                 'tanggal' => now(),
+                'uom' => strtoupper('Rim/Box'),
+                'min' => 1,
+                'max'=> 2,
+                'in' => 100,
+                'out' => 0,
+                'remark' => 'AMAN',
+                'order_qty' => -100,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -35,4 +42,5 @@ class BarangSeeder extends Seeder
         // Masukkan data ke dalam tabel menggunakan DB::table
         DB::table('barang')->insert($data);
     }
+    
 }

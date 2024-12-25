@@ -14,19 +14,19 @@ class BarangMasukSeeder extends Seeder
      */
     public function run()
     {
-        $data = [
-            [
-                'kode_barang' => 'A-001',
-                'nama_barang' => strtoupper('kertas hvs'),
-                'uom' => strtoupper('Rim/Box'),
-                'kuantitas' => 10,
-                'tanggal' => '2024-04-18',
-                'nama_penerima' => 'rifdah',
-                'departemen' => strtoupper('coe'), 
-            ],
-        ];
+        //$data = [
+           // [
+           //     'kode_barang' => 'A-001',
+                //'nama_barang' => strtoupper('kertas hvs'),
+                //'uom' => strtoupper('Rim/Box'),
+                //'kuantitas' => 10,
+               // 'tanggal' => '2024-04-18',
+               // 'nama_penerima' => 'rifdah',
+               // 'departemen' => strtoupper('coe'), 
+           // ],
+        //];
 
         // Masukkan data ke dalam tabel
-        DB::table('barang_masuk')->insert($data);
+       // DB::table('barang_masuk')->insert($data);
     }
 }

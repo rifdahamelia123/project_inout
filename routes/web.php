@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\UserController; // Jika menggunakan controller ini
-use App\Http\Controllers\DashboardSimpaduController;
+use App\Http\Controllers\DashboardInoutController;
 use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\ExcelController;
@@ -31,24 +31,24 @@ Route::get('/', function () {
     // Route Barang (CRUD dan Search) dengan proteksi middleware auth
     Route::middleware(['auth'])->group(function () {
 
-    
+
 
     // Menampilkan daftar barang
     Route::get('/barang', [BarangController::class, 'index'])->name('barang.index');
 
-    // Form tambah barang
+
     Route::get('/barang/create', [BarangController::class, 'create'])->name('barang.create');
     Route::get('/barang/import', [BarangController::class, 'import'])->name('barang.import');
     Route::post('/barang/import', [ExcelController::class, 'importBarang'])->name('barang.importBarang');
 
-    
+
 
     // Hapus barang
     Route::delete('/barang/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
     // edit barang
     Route::get('/barang/edit/{kode_barang}', [BarangController::class, 'edit'])->name('barang.edit');
     Route::put('/barang/{id}', [BarangController::class, 'update'])->name('barang.update');
-    
+
 
     // Menyimpan barang baru
     Route::post('/barang', [BarangController::class, 'store'])->name('barang.store');
@@ -60,13 +60,13 @@ Route::get('/', function () {
 
     // Traffic barang masuk
     Route::get('/barang_masuk', [BarangMasukController::class, 'index'])->name('barang_masuk.index');
-    Route::get('barang_masuk/search', [BarangMasukController::class, 'search'])->name('barang_masuk.search');
+    Route::get('/barang_masuk/search', [BarangMasukController::class, 'search'])->name('barang_masuk.search');
     Route::post('/barang_masuk', [BarangMasukController::class, 'store'])->name('barang_masuk.store');
     Route::get('/barang_masuk/create', [BarangMasukController::class, 'create'])->name('barang_masuk.create');
     Route::get('barang_masuk/import', [BarangMasukController::class, 'import'])->name('barang_masuk.import');
     Route::post('barang_masuk/import', [BarangMasukController::class, 'importStore'])->name('barang_masuk.import.store');
     Route::get('/barang_masuk/edit/{kode_barang}', [BarangMasukController::class, 'edit'])->name('barang_masuk.edit');
-    Route::get('/barang_masuk/{id}/tambah', [BarangMasukController::class, 'tambah'])->name('barang_masuk.tambah');
+    Route::get('/barang_masuk/{kode_barang}/tambah', [BarangMasukController::class, 'tambah'])->name('barang_masuk.tambah');
     Route::get('barang_masuk', [BarangMasukController::class, 'index'])->name('barang_masuk.index');
     Route::get('barang_masuk/export', [BarangMasukController::class, 'export'])->name('barang_masuk.export');
 
@@ -78,7 +78,7 @@ Route::get('/', function () {
     // Trafic barang keluar
     Route::get('/barang_keluar', [BarangKeluarController::class, 'index'])->name('barang_keluar.index');
     Route::post('/barang_keluar', [BarangKeluarController::class, 'store'])->name('barang_keluar.store');
-    Route::get('barang_keluar/search', [BarangKeluarController::class, 'search'])->name('barang_keluar.search');
+    Route::get('/barang_keluar/search', [BarangKeluarController::class, 'search'])->name('barang_keluar.search');
     Route::get('/barang_keluar/create', [BarangKeluarController::class, 'create'])->name('barang_keluar.create');
     Route::get('barang_keluar/import', [BarangKeluarController::class, 'import'])->name('barang_keluar.import');
     Route::post('barang_keluar/import', [BarangKeluarController::class, 'importStore'])->name('barang_keluar.import.store');
@@ -89,28 +89,40 @@ Route::get('/', function () {
     Route::get('barang_keluar/export', [BarangKeluarController::class, 'export'])->name('barang_keluar.export');
     Route::get('/get-nama-barang/{kode_barang}', [BarangController::class, 'getNamaBarang']);
 
-    
+
     //Route::get('/barang_keluar/edit/{kode_barang}', [BarangKeluarController::class, 'edit'])->name('barang_keluar.edit');
     //Route::put('/barang_keluar/{kode_barang}/kurang', [BarangKeluarController::class, 'kurang'])->name('barang_keluar.kurang');
 
 
-    // Log
-    //Route::get('/log_masuk', [LogMasukController::class, 'index'])->name('log_masuk.index');
-    //Route::get('/log_keluar', [LogKeluarController::class, 'index'])->name('log_keluar.index');
+    //Log
+    // Route untuk menampilkan log barang masuk
+    Route::get('/log_masuk', [LogMasukController::class, 'index'])->name('log_masuk.index');
+
+    // Route untuk mencari log barang masuk
+    Route::get('/log_masuk/search', [LogMasukController::class, 'search'])->name('log_masuk.search');
+
+    // Route untuk mengekspor log barang masuk
+    Route::get('/log_masuk/export', [LogMasukController::class, 'export'])->name('log_masuk.export');
+
+
+    Route::get('/log_keluar', [LogKeluarController::class, 'index'])->name('log_keluar.index');
+    Route::get('/log_keluar/search', [LogKeluarController::class, 'search'])->name('log_keluar.search');
+
+    // Route untuk mengekspor log barang masuk
+    Route::get('/log_keluar/export', [LogKeluarController::class, 'export'])->name('log_keluar.export');
 
     });
 
         // Route untuk dashboard setelah login
         Route::middleware(['auth'])->group(function () {
-        Route::get('/home', [DashboardSimpaduController::class, 'index'])->name('home');
-        Route::get('/dashboard-simpadu', [DashboardSimpaduController::class, 'index'])->name('dashboard-simpadu.index');
-        Route::get('/dashboard-simpadu/import', [DashboardSimpaduController::class, 'import'])->name('dashboard-simpadu.import');
-        Route::post('/dashboard-simpadu/import', [DashboardSimpaduController::class, 'importStore'])->name('dashboard-simpadu.import.store');
-        Route::get('/home', [DashboardSimpaduController::class, 'index'])->name('home');
-        Route::get('/dashboard-simpadu/search', [DashboardSimpaduController::class, 'search'])->name('dashboard-simpadu.search');
-        Route::get('/dashboard-simpadu/export', [DashboardSimpaduController::class, 'export'])->name('dashboard-simpadu.export');
-        
- 
+        Route::get('/home', [DashboardInoutController::class, 'index'])->name('home');
+        Route::get('/dashboard-inout', [DashboardInoutController::class, 'index'])->name('dashboard-inout.index');
+        Route::get('/dashboard-inout/import', [DashboardInoutController::class, 'import'])->name('dashboard-inout.import');
+        Route::post('/dashboard-inout/import', [DashboardInoutController::class, 'importStore'])->name('dashboard-inout.import.store');
+        Route::get('/home', [DashboardInoutController::class, 'index'])->name('home');
+        Route::get('/dashboard-inout/export', [DashboardInoutController::class, 'export'])->name('dashboard-inout.export');
+        Route::get('/dashboard-inout/search', [DashboardInoutController::class, 'search'])->name('dashboard-inout.search');
+
     });
 
 /*

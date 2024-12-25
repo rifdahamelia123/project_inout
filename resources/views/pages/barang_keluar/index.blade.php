@@ -67,9 +67,7 @@
                             <div class="card-header">
                                 <h4>Barang Keluar</h4>
                                 <div class="card-header-action d-flex justify-content-between align-items-center">
-                                <a href="{{ route ('barang_keluar.import')}}" class="btn btn-primary">IMPORT EXCEL</a>
-                                <a href="{{ route('barang_keluar.create') }}" class="btn btn-primary">Tambah Barang Keluar</a>                                    
-                                    <form action="{{ route('barang_keluar.search') }}" method="GET" class="d-flex">
+                                <form action="{{ route('barang_keluar.search') }}" method="GET" class="d-flex">
                                         <input type="text" class="form-control me-2" name="query" placeholder="Cari Barang" required style="width: 100px;">
                                         <button type="submit" class="btn btn-primary">
                                             <i class="fas fa-search"></i> <!-- Ikon pencarian -->
@@ -77,22 +75,7 @@
                                     </form>
                                 </div>
                             </div>
-                            <!-- Form Pilih Bulan untuk menampilkan Barang Keluar per bulan dan tahun -->
-                                <div class="card-body">
-                                    <form action="{{ route('barang_keluar.index') }}" method="GET" class="mb-4">
-                                        @csrf
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <label for="bulan">Pilih Tahun dan Bulan:</label>
-                                                <input type="text" id="datepicker" class="form-control" name="bulan" value="{{ request('bulan') }}">
-                                            </div>
-                                            <div class="col-md-3">
-                                                <button type="submit" class="btn btn-primary mt-4">Tampilkan Barang Keluar</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div>                        
+                            
                                 <div class="clearfix mb-3"></div>
                                 <div class="table-responsive">
                                     <table class="table">
@@ -101,13 +84,10 @@
                                                 <th>No</th>
                                                 <th>Kode Barang</th>
                                                 <th>Nama Barang</th>
+                                                <th>Ukuran</th>
                                                 <th>UOM</th>
-                                                <th>Kuantitas</th>
-                                                <th>Tanggal</th>
-                                                <th>Nama Penerima</th>
-                                                <th>Departemen</th>
-                                                <th>Jabatan</th>
-                                                <th>Keperluan</th>
+                                                <th>Stok</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -116,32 +96,26 @@
                                                     <td>{{ $loop->iteration + ($barangKeluar->currentPage() - 1) * $barangKeluar->perPage() }}</td>
                                                     <td>{{ $barang->kode_barang }}</td>
                                                     <td>{{ $barang->nama_barang }}</td>
+                                                    <td>{{ $barang->ukuran }}</td>
                                                     <td>{{ $barang->uom }}</td>
-                                                    <td>{{ $barang->kuantitas }}</td>
-                                                    <td>{{ $barang->tanggal }}</td>
-                                                    <td>{{ $barang->nama_penerima }}</td>
-                                                    <td>{{ $barang->departemen }}</td>
-                                                    <td>{{ $barang->jabatan }}</td>
-                                                    <td>{{ $barang->keperluan }}</td>
+                                                    <td>{{ $barang->stok }}</td>
+                                                    <td>
+                                                    <a href="{{ route('barang_keluar.edit', $barang ->kode_barang) }}" class="btn btn-warning">Keluarkan stok barang</a>  
+                                                    @csrf
+                                                    @method('POST')     
+                                                </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
-                                        <!-- Tombol untuk download Excel -->
-                                    <div class="float-right mb-3">
-                                        <form action="{{ route('barang_keluar.export') }}" method="GET">
-                                            @csrf
-                                            <input type="hidden" name="bulan" value="{{ request('bulan') }}">
-                                            <button type="submit" class="btn btn-primary">Download Excel</button>
-                                        </form>
-                                    </div>
+                                    
                                     <!-- Menampilkan pagination -->
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             Menampilkan {{ $barangKeluar->firstItem() }} sampai {{ $barangKeluar->lastItem() }} dari {{ $barangKeluar->total() }} data
                                         </div>
                                         <div>
-                                            {{ $barangKeluar->appends(['bulan' => request('bulan')])->links() }} <!-- Pagination with bulan parameter -->
+                                            {{ $barangKeluar->links() }} <!-- Pagination controls -->
                                         </div>
                                     </div>
                                 </div>
